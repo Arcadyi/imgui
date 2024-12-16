@@ -1,6 +1,6 @@
 project(imgui)
 
-find_library(SDL3 ../SDL)
+set(IMGUI_SDL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../sdl")
 set(IMGUI_FILES
         imconfig.h
         imgui.h
@@ -31,6 +31,14 @@ set(IMGUI_FILES
         backends/imgui_impl_win32.cpp
         backends/imgui_impl_win32.h
 )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends ../SDL/include)
+
+include_directories(imgui ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends "${IMGUI_SDL_DIR}/include")
+
 add_library(imgui STATIC ${IMGUI_FILES})
-target_link_libraries(imgui PRIVATE SDL3::SDL3)
+target_link_libraries(imgui PRIVATE "${IMGUI_SDL_DIR}/SDL3.lib")
+add_custom_command(
+        TARGET imgui POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${IMGUI_SDL_DIR}/SDL3.dll"
+        $<TARGET_FILE_DIR:imgui>
+)
