@@ -1,6 +1,7 @@
 project(imgui)
 
 find_package(SDL3)
+find_package(Vulkan)
 set(IMGUI_FILES
         imconfig.h
         imgui.h
@@ -30,8 +31,10 @@ set(IMGUI_FILES
         backends/imgui_impl_sdlrenderer3.h
         backends/imgui_impl_win32.cpp
         backends/imgui_impl_win32.h
+        backends/imgui_impl_vulkan.h
+        backends/imgui_impl_vulkan.cpp
 )
 
 include_directories(imgui ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backends)
 add_library(imgui STATIC ${IMGUI_FILES})
-target_link_libraries(imgui PRIVATE SDL3::SDL3)
+target_link_libraries(imgui PRIVATE Vulkan::Vulkan SDL3::SDL3)
